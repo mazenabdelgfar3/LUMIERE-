@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { X, CheckCircle, MapPin } from "lucide-react";
+import { X, CheckCircle } from "lucide-react";
 
 export const openBookingModal = (
   serviceOrBranch?: string | React.MouseEvent,
@@ -114,7 +114,7 @@ ${patientEmail.trim() ? `📧 *البريد:* ${patientEmail}\n` : ""}${selected
 
         {/* عنوان الفورم على نمط عيادات أجمل */}
         <div className="text-center mb-8">
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#9A7B4F] tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-bold text-[#8C6D46] tracking-tight">
             نموذج حجز المواعيد
           </h2>
           <p className="text-sm sm:text-base text-zinc-500 font-medium mt-2">
@@ -122,7 +122,7 @@ ${patientEmail.trim() ? `📧 *البريد:* ${patientEmail}\n` : ""}${selected
           </p>
         </div>
 
-        {/* الحقول المطلوبة بمستطيلات مريحة وكبيرة */}
+        {/* الحقول المطلوبة بارتفاع مريح h-14 rounded-xl */}
         <form onSubmit={handleSubmit} className="space-y-4">
           
           {/* 1. الاسم * */}
@@ -163,31 +163,42 @@ ${patientEmail.trim() ? `📧 *البريد:* ${patientEmail}\n` : ""}${selected
             </div>
           </div>
 
-          {/* 3. الفرع الأقرب في جدة */}
+          {/* 3. أزرار اختيار الفرع */}
           <div>
-            <label className="text-base font-bold text-zinc-800 mb-1.5 block">
-              الفرع الأقرب لكِ في جدة <span className="text-red-500">*</span>
+            <label className="text-base font-bold text-zinc-800 mb-2 block">
+              الفرع <span className="text-red-500">*</span>
             </label>
-            <select
-              value={selectedBranch}
-              onChange={(e) => setSelectedBranch(e.target.value)}
-              className="w-full h-14 px-4 rounded-xl border border-zinc-300 bg-white text-base font-medium text-zinc-900 focus:border-[#8C6D46] focus:outline-none transition-all cursor-pointer"
-            >
-              <option value="فرع الروضة (شارع عبدالمقصود خوجة)">فرع الروضة (شارع عبدالمقصود خوجة)</option>
-              <option value="فرع طريق الملك (حي الشاطئ)">فرع طريق الملك (حي الشاطئ)</option>
-              <option value="فرع السامر (مجمع السامرية الطبي)">فرع السامر (مجمع السامرية الطبي)</option>
-              <option value="فرع النسيم (مجمع السامرية الطبي 2)">فرع النسيم (مجمع السامرية الطبي 2)</option>
-            </select>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              {[
+                { label: "الروضة", full: "فرع الروضة (شارع عبدالمقصود خوجة)" },
+                { label: "طريق الملك", full: "فرع طريق الملك (حي الشاطئ)" },
+                { label: "السامر", full: "فرع السامر (مجمع السامرية الطبي)" },
+                { label: "النسيم", full: "فرع النسيم (مجمع السامرية الطبي 2)" },
+              ].map((b) => (
+                <button
+                  type="button"
+                  key={b.label}
+                  onClick={() => setSelectedBranch(b.full)}
+                  className={`h-12 px-2 rounded-xl text-sm font-bold border transition-all text-center flex items-center justify-center cursor-pointer ${
+                    selectedBranch.includes(b.label)
+                      ? "bg-[#8C6D46] text-white border-[#8C6D46] shadow-md"
+                      : "bg-zinc-50 hover:bg-zinc-100 text-zinc-700 border-zinc-200"
+                  }`}
+                >
+                  {b.label}
+                </button>
+              ))}
+            </div>
           </div>
 
-          {/* 4. البريد الإلكتروني */}
+          {/* 4. البريد الإلكتروني (اختياري) */}
           <div>
             <label className="text-base font-bold text-zinc-800 mb-1.5 block">
-              البريد الإلكتروني
+              البريد الإلكتروني <span className="text-xs text-zinc-400 font-normal">(اختياري)</span>
             </label>
             <input
               type="email"
-              placeholder="أدخل البريد الإلكتروني (اختياري)"
+              placeholder="أدخل البريد الإلكتروني"
               dir="ltr"
               value={patientEmail}
               onChange={(e) => setPatientEmail(e.target.value)}
@@ -195,14 +206,14 @@ ${patientEmail.trim() ? `📧 *البريد:* ${patientEmail}\n` : ""}${selected
             />
           </div>
 
-          {/* 5. الخدمة أو العرض (حقل نصي مفتوح) */}
+          {/* 5. الخدمة (حقل كتابة نصي مفتوح) */}
           <div>
             <label className="text-base font-bold text-zinc-800 mb-1.5 block">
-              الخدمة أو العرض المطلوب
+              الخدمة أو العرض
             </label>
             <input
               type="text"
-              placeholder="اكتبي اسم الخدمة أو العرض أو الطبيبة (اختياري)"
+              placeholder="اكتبي اسم الخدمة أو العرض أو الطبيبة"
               value={selectedService}
               onChange={(e) => setSelectedService(e.target.value)}
               className="w-full h-14 px-4 rounded-xl border border-zinc-300 bg-white text-base font-medium text-zinc-900 placeholder:text-zinc-400 focus:border-[#8C6D46] focus:outline-none transition-all"
@@ -228,7 +239,7 @@ ${patientEmail.trim() ? `📧 *البريد:* ${patientEmail}\n` : ""}${selected
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full h-14 rounded-xl bg-[#8C6D46] hover:bg-[#735836] text-white font-extrabold text-lg shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 cursor-pointer border-none"
+              className="w-full h-14 rounded-xl bg-[#8C6D46] hover:bg-[#735836] text-white font-bold text-lg shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 cursor-pointer border-none"
             >
               <span>{isSubmitting ? "جاري الإرسال..." : "تأكيد حجز الموعد"}</span>
             </button>

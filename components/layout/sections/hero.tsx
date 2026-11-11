@@ -15,76 +15,18 @@ const doctorsSlides: DoctorSlide[] = [
   {
     id: "dr-menna",
     name: "د. منة غزالة",
-    pillText: "د. منة غزالة • جلدية وتجميل",
+    pillText: "د. منة غزالة • أخصائية الجلدية والتجميل والليزر",
     image: "/dr-menna-ghazala.png",
-    alt: "د. منة غزالة - جلدية وتجميل",
+    alt: "د. منة غزالة - أخصائية الجلدية والتجميل والليزر",
   },
   {
-    id: "dr-yasmine",
-    name: "د. ياسمين فؤاد",
-    pillText: "د. ياسمين فؤاد • تجميل وليزر",
+    id: "dr-heba",
+    name: "د. هبة يونس",
+    pillText: "د. هبة يونس • أخصائية الجلدية والتجميل والليزر",
     image: "/dr-heba-younes.png",
-    alt: "د. ياسمين فؤاد - تجميل وليزر",
+    alt: "د. هبة يونس - أخصائية الجلدية والتجميل والليزر",
   },
 ];
-
-// دالة عداد الأرقام السريع مع تأثير انسيابي فخم (Fast Smooth Count-Up Animation)
-const AnimatedCounter = ({
-  target,
-  duration = 1400,
-  prefix = "",
-  suffix = "",
-  decimals = 0,
-}: {
-  target: number;
-  duration?: number;
-  prefix?: string;
-  suffix?: string;
-  decimals?: number;
-}) => {
-  const [value, setValue] = useState(0);
-
-  useEffect(() => {
-    let startTimestamp: number | null = null;
-    let frameId: number;
-
-    // منحنى حركة تسارع ثم تباطؤ ناعم (Ease-Out Exponential)
-    const easeOutExpo = (x: number): number => {
-      return x === 1 ? 1 : 1 - Math.pow(2, -10 * x);
-    };
-
-    const step = (timestamp: number) => {
-      if (!startTimestamp) startTimestamp = timestamp;
-      const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-      const factor = easeOutExpo(progress);
-
-      const current = factor * target;
-      setValue(current);
-
-      if (progress < 1) {
-        frameId = requestAnimationFrame(step);
-      } else {
-        setValue(target);
-      }
-    };
-
-    frameId = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(frameId);
-  }, [target, duration]);
-
-  const formattedNumber =
-    decimals > 0
-      ? value.toFixed(decimals)
-      : Math.floor(value).toLocaleString("en-US");
-
-  return (
-    <span className="tabular-nums">
-      {prefix}
-      {formattedNumber}
-      {suffix}
-    </span>
-  );
-};
 
 export const HeroSection = () => {
   const [currentDoctor, setCurrentDoctor] = useState(0);
@@ -145,7 +87,7 @@ export const HeroSection = () => {
 
           </div>
 
-          {/* صورة الطبيبة بالأسفل بدون أقواس هندسية: إضاءة ناعمة blur-3xl وكبسولة أنيقة بسطر واحد */}
+          {/* صورة الطبيبة بالأسفل بدون أي أقواس هندسية أو منقطة */}
           <div className="order-2 w-full lg:w-5/12 relative flex flex-col items-center justify-end mt-2 lg:mt-0">
             
             {/* إضاءة خلفية ناعمة جداً blur-3xl */}
@@ -193,45 +135,45 @@ export const HeroSection = () => {
         </div>
       </div>
 
-      {/* 3. شريط الإحصائيات المتصل بالأسفل مع عدادات سريعة ومتحركة فور فتح الصفحة */}
+      {/* 3. شريط الإحصائيات بأرقام ثابتة وواضحة فور تحميل الصفحة */}
       <div className="relative z-10 w-full bg-[#8C6D46] text-white shadow-inner">
         <div className="max-w-7xl mx-auto px-4 sm:px-8">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-y-6 lg:gap-y-0 py-6 lg:py-8 divide-y sm:divide-y-0 divide-white/20 lg:divide-x lg:divide-x-reverse lg:divide-white/25">
             
-            {/* 1. عداد +19,500 مراجعة وتجربة موثقة */}
+            {/* 1. +19,500 مراجعة وتجربة موثقة */}
             <div className="flex flex-col items-center justify-center text-center px-3 sm:px-4">
-              <span className="text-3xl lg:text-4xl font-bold tracking-tight leading-none text-white drop-shadow-sm">
-                <AnimatedCounter target={19500} prefix="+" duration={1400} />
+              <span className="text-3xl lg:text-4xl font-bold tracking-tight leading-none text-white drop-shadow-sm tabular-nums">
+                +19,500
               </span>
               <span className="text-xs sm:text-sm font-medium text-white/95 mt-1.5 sm:mt-2">
                 مراجعة وتجربة موثقة
               </span>
             </div>
 
-            {/* 2. عداد 4 فروع تغطي جدة */}
+            {/* 2. 4 فروع تغطي جدة */}
             <div className="flex flex-col items-center justify-center text-center px-3 sm:px-4">
-              <span className="text-3xl lg:text-4xl font-bold tracking-tight leading-none text-white drop-shadow-sm">
-                <AnimatedCounter target={4} duration={900} />
+              <span className="text-3xl lg:text-4xl font-bold tracking-tight leading-none text-white drop-shadow-sm tabular-nums">
+                4
               </span>
               <span className="text-xs sm:text-sm font-medium text-white/95 mt-1.5 sm:mt-2">
                 فروع تغطي جدة
               </span>
             </div>
 
-            {/* 3. عداد 100% مواد وأجهزة معتمدة SFDA */}
+            {/* 3. 100% مواد وأجهزة معتمدة SFDA */}
             <div className="flex flex-col items-center justify-center text-center px-3 sm:px-4 pt-4 sm:pt-0 border-t sm:border-t-0 border-white/20">
-              <span className="text-3xl lg:text-4xl font-bold tracking-tight leading-none text-white drop-shadow-sm">
-                <AnimatedCounter target={100} suffix="%" duration={1200} />
+              <span className="text-3xl lg:text-4xl font-bold tracking-tight leading-none text-white drop-shadow-sm tabular-nums">
+                100%
               </span>
               <span className="text-xs sm:text-sm font-medium text-white/95 mt-1.5 sm:mt-2">
                 مواد وأجهزة معتمدة SFDA
               </span>
             </div>
 
-            {/* 4. عداد 4.9 ★ تقييم رضا العميلات */}
+            {/* 4. 4.9 ★ تقييم رضا العميلات */}
             <div className="flex flex-col items-center justify-center text-center px-3 sm:px-4 pt-4 sm:pt-0 border-t sm:border-t-0 border-white/20">
-              <span className="text-3xl lg:text-4xl font-bold tracking-tight leading-none text-white drop-shadow-sm">
-                <AnimatedCounter target={4.9} suffix=" ★" decimals={1} duration={1300} />
+              <span className="text-3xl lg:text-4xl font-bold tracking-tight leading-none text-white drop-shadow-sm tabular-nums">
+                4.9 ★
               </span>
               <span className="text-xs sm:text-sm font-medium text-white/95 mt-1.5 sm:mt-2">
                 تقييم رضا العميلات

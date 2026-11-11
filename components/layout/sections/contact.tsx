@@ -137,7 +137,7 @@ ${notes.trim() ? `📝 *ملاحظات:* ${notes.trim()}\n` : ""}━━━━━
             </label>
             <textarea
               rows={3}
-              placeholder="مثال: أفضل موعد في الفترة المسائية، أو الاستشارة مع د. ياسمين فؤاد..."
+              placeholder="مثال: أفضل موعد في الفترة المسائية، أو الاستشارة مع د. منة غزالة أو د. هبة يونس..."
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               className="w-full p-4 rounded-xl border border-white/15 text-sm font-medium text-white placeholder:text-zinc-500 focus:outline-none focus:border-[#C5A880] bg-white/5 transition-colors resize-none"

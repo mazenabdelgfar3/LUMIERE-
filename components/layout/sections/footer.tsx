@@ -32,32 +32,32 @@ export const FooterSection = () => {
             </h3>
             <ul className="space-y-3 text-base font-medium text-white/90">
               <li>
-                <Link href="#hero" className="hover:text-white transition-opacity hover:opacity-75">
+                <a href="#hero" className="hover:text-white transition-opacity hover:opacity-75 block">
                   الرئيسية
-                </Link>
+                </a>
               </li>
               <li>
-                <button
-                  onClick={openBookingModal}
-                  className="hover:text-white transition-opacity hover:opacity-75 cursor-pointer border-none bg-transparent p-0 text-base font-medium text-white/90"
+                <a
+                  href="#branches"
+                  className="hover:text-white transition-opacity hover:opacity-75 block"
                 >
-                  عن العيادة
-                </button>
+                  عن العيادة والفروع
+                </a>
               </li>
               <li>
-                <Link href="#hero" className="hover:text-white transition-opacity hover:opacity-75">
-                  استشارياتنا
-                </Link>
+                <a href="#doctors" className="hover:text-white transition-opacity hover:opacity-75 block">
+                  طبيبات لوميير
+                </a>
               </li>
               <li>
-                <Link href="#before-after" className="hover:text-white transition-opacity hover:opacity-75">
+                <a href="#before-after" className="hover:text-white transition-opacity hover:opacity-75 block">
                   حالات قبل وبعد
-                </Link>
+                </a>
               </li>
               <li>
-                <Link href="#pricing" className="hover:text-white transition-opacity hover:opacity-75">
+                <a href="#pricing" className="hover:text-white transition-opacity hover:opacity-75 block">
                   العروض والباقات
-                </Link>
+                </a>
               </li>
             </ul>
           </div>
@@ -69,36 +69,52 @@ export const FooterSection = () => {
             </h3>
             <ul className="space-y-3 text-base font-medium text-white/90">
               <li>
-                <button
-                  onClick={openBookingModal}
-                  className="hover:text-white transition-opacity hover:opacity-75 cursor-pointer border-none bg-transparent p-0 text-base font-medium text-white/90"
+                <a
+                  href="#pricing"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    openBookingModal("الجلدية والليزر (كانديلا)");
+                  }}
+                  className="hover:text-white transition-opacity hover:opacity-75 block"
                 >
                   الجلدية والليزر (كانديلا)
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  onClick={openBookingModal}
-                  className="hover:text-white transition-opacity hover:opacity-75 cursor-pointer border-none bg-transparent p-0 text-base font-medium text-white/90"
+                <a
+                  href="#pricing"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    openBookingModal("الحقن التجميلي والفيلر");
+                  }}
+                  className="hover:text-white transition-opacity hover:opacity-75 block"
                 >
                   الحقن التجميلي والفيلر
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  onClick={openBookingModal}
-                  className="hover:text-white transition-opacity hover:opacity-75 cursor-pointer border-none bg-transparent p-0 text-base font-medium text-white/90"
+                <a
+                  href="#pricing"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    openBookingModal("جلسات النضارة والاكسوزوم");
+                  }}
+                  className="hover:text-white transition-opacity hover:opacity-75 block"
                 >
                   جلسات النضارة والاكسوزوم
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  onClick={openBookingModal}
-                  className="hover:text-white transition-opacity hover:opacity-75 cursor-pointer border-none bg-transparent p-0 text-base font-medium text-white/90"
+                <a
+                  href="#pricing"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    openBookingModal("العناية بالبشرة والتصبغات");
+                  }}
+                  className="hover:text-white transition-opacity hover:opacity-75 block"
                 >
                   العناية بالبشرة والتصبغات
-                </button>
+                </a>
               </li>
             </ul>
           </div>
@@ -110,36 +126,52 @@ export const FooterSection = () => {
             </h3>
             <ul className="space-y-3 text-base font-medium text-white/90">
               <li>
-                <button
-                  onClick={openBookingModal}
-                  className="hover:text-white transition-opacity hover:opacity-75 cursor-pointer border-none bg-transparent p-0 text-base font-medium text-white/90"
+                <a
+                  href="#pricing"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    openBookingModal("نحت وتحديد الفك (لومي فيس)");
+                  }}
+                  className="hover:text-white transition-opacity hover:opacity-75 block"
                 >
                   نحت وتحديد الفك (لومي فيس)
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  onClick={openBookingModal}
-                  className="hover:text-white transition-opacity hover:opacity-75 cursor-pointer border-none bg-transparent p-0 text-base font-medium text-white/90"
+                <a
+                  href="#pricing"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    openBookingModal("فيلر الشفايف الطبيعي");
+                  }}
+                  className="hover:text-white transition-opacity hover:opacity-75 block"
                 >
                   فيلر الشفايف الطبيعي
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  onClick={openBookingModal}
-                  className="hover:text-white transition-opacity hover:opacity-75 cursor-pointer border-none bg-transparent p-0 text-base font-medium text-white/90"
+                <a
+                  href="#pricing"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    openBookingModal("شد الوجه بالخيوط");
+                  }}
+                  className="hover:text-white transition-opacity hover:opacity-75 block"
                 >
                   شد الوجه بالخيوط
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  onClick={openBookingModal}
-                  className="hover:text-white transition-opacity hover:opacity-75 cursor-pointer border-none bg-transparent p-0 text-base font-medium text-white/90"
+                <a
+                  href="#pricing"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    openBookingModal("علاج الندبات وحب الشباب");
+                  }}
+                  className="hover:text-white transition-opacity hover:opacity-75 block"
                 >
                   علاج الندبات وحب الشباب
-                </button>
+                </a>
               </li>
             </ul>
           </div>
