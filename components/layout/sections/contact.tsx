@@ -1,245 +1,165 @@
 "use client";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
-import { Building2, Clock, Mail, Phone } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-
-const formSchema = z.object({
-  firstName: z.string().min(2).max(255),
-  lastName: z.string().min(2).max(255),
-  email: z.string().email(),
-  subject: z.string().min(2).max(255),
-  message: z.string(),
-});
+import { ArrowLeft, MessageCircle } from "lucide-react";
 
 export const ContactSection = () => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      subject: "Web Development",
-      message: "",
-    },
-  });
+  const [patientName, setPatientName] = useState("");
+  const [patientPhone, setPatientPhone] = useState("");
+  const [selectedBranch, setSelectedBranch] = useState("فرع الروضة");
+  const [selectedService, setSelectedService] = useState("لومي فيس ناعم (1,899 ريال)");
+  const [notes, setNotes] = useState("");
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    const { firstName, lastName, email, subject, message } = values;
-    console.log(values);
+  const handleBookingSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
 
-    const mailToLink = `mailto:leomirandadev@gmail.com?subject=${subject}&body=Hello I am ${firstName} ${lastName}, my Email is ${email}. %0D%0A${message}`;
+    if (!patientName.trim() || !patientPhone.trim()) {
+      alert("يرجى إدخال اسمكِ ورقم الواتساب");
+      return;
+    }
 
-    window.location.href = mailToLink;
-  }
+    const message = 
+`✨ *طلب حجز موعد - عيادات لوميير للتجميل* ✨
+━━━━━━━━━━━━━━━━━━
+👤 *الاسم:* ${patientName}
+📱 *رقم واتساب:* ${patientPhone}
+📍 *الفرع المطلوب:* ${selectedBranch}
+💉 *الإجراء / العرض:* ${selectedService}
+${notes.trim() ? `📝 *ملاحظات:* ${notes.trim()}\n` : ""}━━━━━━━━━━━━━━━━━━
+أرجو تأكيد أقرب موعد متاح. شكراً لكم!`;
+
+    const url = `https://wa.me/966920002024?text=${encodeURIComponent(message)}`;
+    window.open(url, "_blank");
+  };
 
   return (
-    <section id="contact" className="container py-24 sm:py-32">
-      <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div>
-          <div className="mb-4">
-            <h2 className="text-lg text-primary mb-2 tracking-wider">
-              Contact
-            </h2>
-
-            <h2 className="text-3xl md:text-4xl font-bold">Connect With Us</h2>
-          </div>
-          <p className="mb-8 text-muted-foreground lg:w-5/6">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum
-            ipsam sint enim exercitationem ex autem corrupti quas tenetur
-          </p>
-
-          <div className="flex flex-col gap-4">
-            <div>
-              <div className="flex gap-2 mb-1">
-                <Building2 />
-                <div className="font-bold">Find us</div>
-              </div>
-
-              <div>742 Evergreen Terrace, Springfield, IL 62704</div>
-            </div>
-
-            <div>
-              <div className="flex gap-2 mb-1">
-                <Phone />
-                <div className="font-bold">Call us</div>
-              </div>
-
-              <div>+1 (619) 123-4567</div>
-            </div>
-
-            <div>
-              <div className="flex gap-2 mb-1">
-                <Mail />
-                <div className="font-bold">Mail US</div>
-              </div>
-
-              <div>leomirandadev@gmail.com</div>
-            </div>
-
-            <div>
-              <div className="flex gap-2">
-                <Clock />
-                <div className="font-bold">Visit us</div>
-              </div>
-
-              <div>
-                <div>Monday - Friday</div>
-                <div>8AM - 4PM</div>
-              </div>
-            </div>
-          </div>
+    <section id="contact" className="w-full max-w-4xl mx-auto px-4 sm:px-8 py-20 sm:py-28 text-right bg-[#141619] text-white">
+      
+      {/* Luxury Form Container */}
+      <div className="bg-[#1c1a17] rounded-3xl border border-white/10 p-8 sm:p-14 shadow-2xl text-right">
+        
+        {/* Header directly above the form */}
+        <div className="text-center max-w-md mx-auto mb-10 space-y-2">
+          <span className="text-xs font-bold text-[#C5A880] tracking-wider uppercase block">
+            عيادات لوميير للتجميل
+          </span>
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+            احجزي استشارتكِ
+          </h2>
         </div>
 
-        <Card className="bg-muted/60 dark:bg-card">
-          <CardHeader className="text-primary text-2xl"> </CardHeader>
-          <CardContent>
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="grid w-full gap-4"
-              >
-                <div className="flex flex-col md:!flex-row gap-8">
-                  <FormField
-                    control={form.control}
-                    name="firstName"
-                    render={({ field }) => (
-                      <FormItem className="w-full">
-                        <FormLabel>First Name</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Leopoldo" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="lastName"
-                    render={({ field }) => (
-                      <FormItem className="w-full">
-                        <FormLabel>Last Name</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Miranda" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
+        {/* Clean High-Contrast Form */}
+        <form onSubmit={handleBookingSubmit} className="space-y-6 max-w-2xl mx-auto">
+          
+          {/* Row 1: Name & Phone */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div>
+              <label className="block text-xs font-bold text-zinc-300 mb-2">
+                اسمكِ
+              </label>
+              <input
+                type="text"
+                placeholder="اسمكِ الكريم"
+                value={patientName}
+                onChange={(e) => setPatientName(e.target.value)}
+                required
+                className="w-full h-12 px-4 rounded-xl border border-white/15 text-sm font-medium text-white placeholder:text-zinc-500 focus:outline-none focus:border-[#C5A880] bg-white/5 transition-colors"
+              />
+            </div>
 
-                <div className="flex flex-col gap-1.5">
-                  <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Email</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="email"
-                            placeholder="leomirandadev@gmail.com"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
+            <div>
+              <label className="block text-xs font-bold text-zinc-300 mb-2">
+                رقم واتساب
+              </label>
+              <input
+                type="tel"
+                placeholder="05xxxxxxxx"
+                dir="ltr"
+                value={patientPhone}
+                onChange={(e) => setPatientPhone(e.target.value)}
+                required
+                className="w-full h-12 px-4 rounded-xl border border-white/15 text-sm font-medium text-white placeholder:text-zinc-500 text-right focus:outline-none focus:border-[#C5A880] bg-white/5 transition-colors"
+              />
+            </div>
+          </div>
 
-                <div className="flex flex-col gap-1.5">
-                  <FormField
-                    control={form.control}
-                    name="subject"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Subject</FormLabel>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select a subject" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value="Web Development">
-                              Web Development
-                            </SelectItem>
-                            <SelectItem value="Mobile Development">
-                              Mobile Development
-                            </SelectItem>
-                            <SelectItem value="Figma Design">
-                              Figma Design
-                            </SelectItem>
-                            <SelectItem value="REST API">REST API</SelectItem>
-                            <SelectItem value="FullStack Project">
-                              FullStack Project
-                            </SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
+          {/* Row 2: Service Selection */}
+          <div>
+            <label className="block text-xs font-bold text-zinc-300 mb-2">
+              الإجراء أو العرض المطلوب
+            </label>
+            <select
+              value={selectedService}
+              onChange={(e) => setSelectedService(e.target.value)}
+              className="w-full h-12 px-4 rounded-xl border border-white/15 text-sm font-medium text-white focus:outline-none focus:border-[#C5A880] bg-[#141619] transition-colors"
+            >
+              <option value="لومي فيس ناعم (1,899 ريال)">لومي فيس ناعم - تحديد الفك والذقن (1,899 ريال)</option>
+              <option value="فيلر شفايف ريف مع رتوش (799 ريال)">فيلر شفايف ريف مع رتوش (799 ريال)</option>
+              <option value="الشد المائي الملكي (1,299 ريال)">الشد المائي الملكي واستعادة النضارة (1,299 ريال)</option>
+              <option value="تحفيز الكولاجين بالنضارة (999 ريال)">تحفيز الكولاجين بالنضارة العميقة (999 ريال)</option>
+              <option value="جلسة ليزر كانديلا جنتل برو (299 ريال)">جلسة ليزر كانديلا جنتل برو ماكس (299 ريال)</option>
+              <option value="استشارة جلدية وتجميل عامة">استشارة جلدية وتجميل عامة مع الاستشارية</option>
+            </select>
+          </div>
 
-                <div className="flex flex-col gap-1.5">
-                  <FormField
-                    control={form.control}
-                    name="message"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Message</FormLabel>
-                        <FormControl>
-                          <Textarea
-                            rows={5}
-                            placeholder="Your message..."
-                            className="resize-none"
-                            {...field}
-                          />
-                        </FormControl>
+          {/* Row 3: Branch Selection */}
+          <div>
+            <label className="block text-xs font-bold text-zinc-300 mb-2">
+              الفرع الأقرب لكِ في جدة
+            </label>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+              {[
+                { name: "فرع الروضة", id: "rawdah" },
+                { name: "طريق الملك", id: "king-rd" },
+                { name: "فرع النسيم", id: "naseem" },
+                { name: "فرع السامر", id: "samer" },
+              ].map((branch) => (
+                <button
+                  type="button"
+                  key={branch.id}
+                  onClick={() => setSelectedBranch(branch.name)}
+                  className={`h-11 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
+                    selectedBranch === branch.name
+                      ? "border-[#C5A880] bg-[#C5A880] text-zinc-950 shadow-sm"
+                      : "border-white/15 bg-white/5 text-zinc-300 hover:border-white/30"
+                  }`}
+                >
+                  {branch.name}
+                </button>
+              ))}
+            </div>
+          </div>
 
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
+          {/* Row 4: Optional Notes */}
+          <div>
+            <label className="block text-xs font-bold text-zinc-300 mb-2">
+              ملاحظات أو رغبة محددة (اختياري)
+            </label>
+            <textarea
+              rows={3}
+              placeholder="مثال: أفضل موعد في الفترة المسائية، أو الاستشارة مع د. ياسمين فؤاد..."
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              className="w-full p-4 rounded-xl border border-white/15 text-sm font-medium text-white placeholder:text-zinc-500 focus:outline-none focus:border-[#C5A880] bg-white/5 transition-colors resize-none"
+            />
+          </div>
 
-                <Button className="mt-4">Send message</Button>
-              </form>
-            </Form>
-          </CardContent>
+          {/* Submit CTA */}
+          <div className="pt-2">
+            <button
+              type="submit"
+              className="w-full h-14 rounded-full bg-[#C5A880] hover:bg-[#b5966c] text-zinc-950 font-bold text-base shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer border-none"
+            >
+              <MessageCircle className="w-5 h-5 fill-zinc-950 text-[#C5A880]" />
+              <span>تأكيد الحجز المباشر عبر واتساب</span>
+              <ArrowLeft className="w-4 h-4 mr-1" />
+            </button>
+          </div>
 
-          <CardFooter></CardFooter>
-        </Card>
-      </section>
+        </form>
+
+      </div>
+
     </section>
   );
 };

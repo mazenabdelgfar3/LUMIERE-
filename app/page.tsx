@@ -1,59 +1,25 @@
-import { BenefitsSection } from "@/components/layout/sections/benefits";
-import { CommunitySection } from "@/components/layout/sections/community";
-import { ContactSection } from "@/components/layout/sections/contact";
-import { FAQSection } from "@/components/layout/sections/faq";
-import { FeaturesSection } from "@/components/layout/sections/features";
-import { FooterSection } from "@/components/layout/sections/footer";
+import { Navbar } from "@/components/layout/navbar";
 import { HeroSection } from "@/components/layout/sections/hero";
+import { BeforeAfterSection } from "@/components/layout/sections/before-after";
 import { PricingSection } from "@/components/layout/sections/pricing";
-import { ServicesSection } from "@/components/layout/sections/services";
-import { SponsorsSection } from "@/components/layout/sections/sponsors";
-import { TeamSection } from "@/components/layout/sections/team";
-import { TestimonialSection } from "@/components/layout/sections/testimonial";
+import { BranchesMapSection } from "@/components/layout/sections/branches-map";
+import { FooterSection } from "@/components/layout/sections/footer";
 
 export const metadata = {
-  title: "Shadcn - Landing template",
-  description: "Free Shadcn landing page for developers",
-  openGraph: {
-    type: "website",
-    url: "https://github.com/nobruf/shadcn-landing-page.git",
-    title: "Shadcn - Landing template",
-    description: "Free Shadcn landing page for developers",
-    images: [
-      {
-        url: "https://res.cloudinary.com/dbzv9xfjp/image/upload/v1723499276/og-images/shadcn-vue.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Shadcn - Landing template",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    site: "https://github.com/nobruf/shadcn-landing-page.git",
-    title: "Shadcn - Landing template",
-    description: "Free Shadcn landing page for developers",
-    images: [
-      "https://res.cloudinary.com/dbzv9xfjp/image/upload/v1723499276/og-images/shadcn-vue.jpg",
-    ],
-  },
+  title: "عيادات لوميير بجدة | وجهتكِ الأولى للجمال الطبيعي والجلدية",
+  description:
+    "نخبة من استشاريات التجميل والجلدية لتقديم أحدث جلسات النضارة، الفيلر، وليزر كانديلا بأعلى معايير الأمان الطبي بجدة.",
 };
 
 export default function Home() {
   return (
-    <>
+    <main className="flex flex-col min-h-screen bg-[#141619] text-white">
+      <Navbar />
       <HeroSection />
-      <SponsorsSection />
-      <BenefitsSection />
-      <FeaturesSection />
-      <ServicesSection />
-      <TestimonialSection />
-      <TeamSection />
-      <CommunitySection />
+      <BeforeAfterSection />
       <PricingSection />
-      <ContactSection />
-      <FAQSection />
+      <BranchesMapSection />
       <FooterSection />
-    </>
+    </main>
   );
 }

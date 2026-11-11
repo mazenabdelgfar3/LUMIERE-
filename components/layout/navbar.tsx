@@ -1,190 +1,188 @@
 "use client";
-import { ChevronsDown, Github, Menu } from "lucide-react";
-import React from "react";
-import {
-  Sheet,
-  SheetContent,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "../ui/sheet";
-import { Separator } from "../ui/separator";
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from "../ui/navigation-menu";
-import { Button } from "../ui/button";
-import Link from "next/link";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { ToggleTheme } from "./toogle-theme";
-
-interface RouteProps {
-  href: string;
-  label: string;
-}
-
-interface FeatureProps {
-  title: string;
-  description: string;
-}
-
-const routeList: RouteProps[] = [
-  {
-    href: "#testimonials",
-    label: "Testimonials",
-  },
-  {
-    href: "#team",
-    label: "Team",
-  },
-  {
-    href: "#contact",
-    label: "Contact",
-  },
-  {
-    href: "#faq",
-    label: "FAQ",
-  },
-];
-
-const featureList: FeatureProps[] = [
-  {
-    title: "Showcase Your Value ",
-    description: "Highlight how your product solves user problems.",
-  },
-  {
-    title: "Build Trust",
-    description:
-      "Leverages social proof elements to establish trust and credibility.",
-  },
-  {
-    title: "Capture Leads",
-    description:
-      "Make your lead capture form visually appealing and strategically.",
-  },
-];
+import Link from "next/link";
+import { openBookingModal } from "@/components/BookingModal";
+import { X, Phone, Menu } from "lucide-react";
 
 export const Navbar = () => {
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 30);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <header className="shadow-inner bg-opacity-15 w-[90%] md:w-[70%] lg:w-[75%] lg:max-w-screen-xl top-5 mx-auto sticky border border-secondary z-40 rounded-2xl flex justify-between items-center p-2 bg-card">
-      <Link href="/" className="font-bold text-lg flex items-center">
-        <ChevronsDown className="bg-gradient-to-tr border-secondary from-primary via-primary/70 to-primary rounded-lg w-9 h-9 mr-2 border text-white" />
-        Shadcn
-      </Link>
-      {/* <!-- Mobile --> */}
-      <div className="flex items-center lg:hidden">
-        <Sheet open={isOpen} onOpenChange={setIsOpen}>
-          <SheetTrigger asChild>
-            <Menu
-              onClick={() => setIsOpen(!isOpen)}
-              className="cursor-pointer lg:hidden"
-            />
-          </SheetTrigger>
+    <>
+      <header
+        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 h-20 flex items-center ${
+          isScrolled
+            ? "bg-white shadow-sm border-b border-zinc-200"
+            : "bg-[#181411]/90 backdrop-blur-md border-b border-white/10"
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-8 w-full h-full flex items-center justify-between">
+          
+          {/* أقصى اليمين: اللوجو واسم "عيادات لوميير" نظيف ومقروء */}
+          <Link href="/" className="flex items-center gap-3 group">
+            <div
+              className={`relative w-11 h-11 rounded-full overflow-hidden border shadow-sm flex-shrink-0 transition-colors ${
+                isScrolled
+                  ? "border-[#9A7B4F]/40 bg-white"
+                  : "border-[#C5A880]/50 bg-black"
+              }`}
+            >
+              <Image
+                src="/lumiere-logo.jpg"
+                alt="عيادات لوميير"
+                fill
+                priority
+                className="object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+            </div>
+            <span
+              className={`font-extrabold text-xl sm:text-2xl tracking-tight leading-none transition-colors ${
+                isScrolled ? "text-[#9A7B4F]" : "text-white"
+              }`}
+            >
+              عيادات لوميير
+            </span>
+          </Link>
 
-          <SheetContent
-            side="left"
-            className="flex flex-col justify-between rounded-tr-2xl rounded-br-2xl bg-card border-secondary"
+          {/* أقصى اليسار: عناصر التحكم وزر الحجز المخصص للديسكتوب فقط */}
+          <div className="flex items-center gap-4 sm:gap-6" dir="ltr">
+            
+            {/* Hamburger Button */}
+            <button
+              onClick={() => setIsMenuOpen(true)}
+              className="flex items-center justify-center w-10 h-10 rounded-lg hover:opacity-80 transition-opacity cursor-pointer"
+              aria-label="القائمة الرئيسية"
+            >
+              <div className="flex flex-col justify-center gap-1.5">
+                <span
+                  className={`w-7 h-[3px] rounded-full transition-colors ${
+                    isScrolled ? "bg-[#9A7B4F]" : "bg-white"
+                  }`}
+                />
+                <span
+                  className={`w-7 h-[3px] rounded-full transition-colors ${
+                    isScrolled ? "bg-[#9A7B4F]" : "bg-white"
+                  }`}
+                />
+                <span
+                  className={`w-7 h-[3px] rounded-full transition-colors ${
+                    isScrolled ? "bg-[#9A7B4F]" : "bg-white"
+                  }`}
+                />
+              </div>
+            </button>
+
+            {/* زر اللغة EN ظاهر في الموبايل والديسكتوب بأقصى اليسار بجانب المنيو */}
+            <button
+              onClick={() => alert("النسخة الإنجليزية قريباً")}
+              className={`font-extrabold text-sm sm:text-base tracking-wider transition-colors cursor-pointer px-1 py-1 ${
+                isScrolled
+                  ? "text-zinc-950 hover:text-[#9A7B4F]"
+                  : "text-white hover:text-[#C5A880]"
+              }`}
+            >
+              EN
+            </button>
+
+            {/* زر حجز المواعيد: مخفي تماماً في الموبايل (< md) ويظهر في الديسكتوب فقط */}
+            <button
+              onClick={() => openBookingModal()}
+              className="hidden md:inline-flex rounded-full px-8 py-3 bg-[#C5A880] hover:bg-[#b5966c] text-zinc-950 font-extrabold text-sm sm:text-base shadow-md transition-all transform hover:scale-[1.02] cursor-pointer border-none"
+            >
+              حجز المواعيد
+            </button>
+
+          </div>
+
+        </div>
+      </header>
+
+      {/* القائمة الجانبية المنبثقة */}
+      {isMenuOpen && (
+        <div 
+          className="fixed inset-0 z-50 flex justify-start bg-black/80 backdrop-blur-sm animate-in fade-in duration-200" 
+          dir="rtl"
+          onClick={() => setIsMenuOpen(false)}
+        >
+          <div 
+            className="relative w-full max-w-sm h-full bg-[#141619] border-l border-[#C5A880]/30 p-8 flex flex-col justify-between text-right text-white"
+            onClick={(e) => e.stopPropagation()}
           >
-            <div>
-              <SheetHeader className="mb-4 ml-4">
-                <SheetTitle className="flex items-center">
-                  <Link href="/" className="flex items-center">
-                    <ChevronsDown className="bg-gradient-to-tr border-secondary from-primary via-primary/70 to-primary rounded-lg w-9 h-9 mr-2 border text-white" />
-                    Shadcn
-                  </Link>
-                </SheetTitle>
-              </SheetHeader>
+            {/* Close */}
+            <div className="flex items-center justify-between pb-6 border-b border-white/10">
+              <span className="font-bold text-xl text-[#DFC298]">عيادات لوميير</span>
+              <button 
+                onClick={() => setIsMenuOpen(false)}
+                className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5 text-white" />
+              </button>
+            </div>
 
-              <div className="flex flex-col gap-2">
-                {routeList.map(({ href, label }) => (
-                  <Button
-                    key={href}
-                    onClick={() => setIsOpen(false)}
-                    asChild
-                    variant="ghost"
-                    className="justify-start text-base"
-                  >
-                    <Link href={href}>{label}</Link>
-                  </Button>
-                ))}
+            {/* Links */}
+            <div className="flex flex-col gap-5 py-6">
+              <a 
+                href="#hero" 
+                onClick={() => setIsMenuOpen(false)}
+                className="text-lg font-bold hover:text-[#C5A880] transition-colors"
+              >
+                الرئيسية
+              </a>
+              <a 
+                href="#before-after" 
+                onClick={() => setIsMenuOpen(false)}
+                className="text-lg font-bold hover:text-[#C5A880] transition-colors"
+              >
+                حالات قبل وبعد
+              </a>
+              <a 
+                href="#pricing" 
+                onClick={() => setIsMenuOpen(false)}
+                className="text-lg font-bold hover:text-[#C5A880] transition-colors"
+              >
+                العروض والباقات
+              </a>
+              <a 
+                href="#branches" 
+                onClick={() => setIsMenuOpen(false)}
+                className="text-lg font-bold hover:text-[#C5A880] transition-colors"
+              >
+                فروعنا بجدة
+              </a>
+            </div>
+
+            {/* Footer / CTA in Menu */}
+            <div className="pt-6 border-t border-white/10 flex flex-col gap-4">
+              <button
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  openBookingModal();
+                }}
+                className="w-full py-3.5 rounded-full bg-[#C5A880] text-zinc-950 font-extrabold text-base text-center shadow-lg hover:bg-[#b5966c] cursor-pointer border-none"
+              >
+                حجز المواعيد
+              </button>
+              <div className="flex items-center justify-center gap-2 text-xs text-zinc-400">
+                <Phone className="w-3.5 h-3.5 text-[#C5A880]" />
+                <span dir="ltr">920002024</span>
               </div>
             </div>
 
-            <SheetFooter className="flex-col sm:flex-col justify-start items-start">
-              <Separator className="mb-2" />
-
-              <ToggleTheme />
-            </SheetFooter>
-          </SheetContent>
-        </Sheet>
-      </div>
-
-      {/* <!-- Desktop --> */}
-      <NavigationMenu className="hidden lg:block mx-auto">
-        <NavigationMenuList>
-          <NavigationMenuItem>
-            <NavigationMenuTrigger className="bg-card text-base">
-              Features
-            </NavigationMenuTrigger>
-            <NavigationMenuContent>
-              <div className="grid w-[600px] grid-cols-2 gap-5 p-4">
-                <Image
-                  src="https://avatars.githubusercontent.com/u/75042455?v=4"
-                  alt="RadixLogo"
-                  className="h-full w-full rounded-md object-cover"
-                  width={600}
-                  height={600}
-                />
-                <ul className="flex flex-col gap-2">
-                  {featureList.map(({ title, description }) => (
-                    <li
-                      key={title}
-                      className="rounded-md p-3 text-sm hover:bg-muted"
-                    >
-                      <p className="mb-1 font-semibold leading-none text-foreground">
-                        {title}
-                      </p>
-                      <p className="line-clamp-2 text-muted-foreground">
-                        {description}
-                      </p>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </NavigationMenuContent>
-          </NavigationMenuItem>
-
-          <NavigationMenuItem>
-            {routeList.map(({ href, label }) => (
-              <NavigationMenuLink key={href} asChild>
-                <Link href={href} className="text-base px-2">
-                  {label}
-                </Link>
-              </NavigationMenuLink>
-            ))}
-          </NavigationMenuItem>
-        </NavigationMenuList>
-      </NavigationMenu>
-
-      <div className="hidden lg:flex">
-        <ToggleTheme />
-
-        <Button asChild size="sm" variant="ghost" aria-label="View on GitHub">
-          <Link
-            aria-label="View on GitHub"
-            href="https://github.com/nobruf/shadcn-landing-page.git"
-            target="_blank"
-          >
-            <Github className="size-5" />
-          </Link>
-        </Button>
-      </div>
-    </header>
+          </div>
+        </div>
+      )}
+    </>
   );
 };

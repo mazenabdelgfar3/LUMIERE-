@@ -1,139 +1,84 @@
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Check } from "lucide-react";
+"use client";
+import React from "react";
+import { openBookingModal } from "@/components/BookingModal";
 
-enum PopularPlan {
-  NO = 0,
-  YES = 1,
-}
-
-interface PlanProps {
+interface Offer {
   title: string;
-  popular: PopularPlan;
   price: number;
-  description: string;
-  buttonText: string;
-  benefitList: string[];
 }
 
-const plans: PlanProps[] = [
+const officialOffers: Offer[] = [
   {
-    title: "Free",
-    popular: 0,
-    price: 0,
-    description:
-      "Lorem ipsum dolor sit, amet ipsum consectetur adipisicing elit.",
-    buttonText: "Start Free Trial",
-    benefitList: [
-      "1 team member",
-      "1 GB storage",
-      "Upto 2 pages",
-      "Community support",
-      "AI assistance",
-    ],
+    title: "لومي فيس لتحديد الفك والذقن",
+    price: 1899,
   },
   {
-    title: "Premium",
-    popular: 1,
-    price: 45,
-    description:
-      "Lorem ipsum dolor sit, amet ipsum consectetur adipisicing elit.",
-    buttonText: "Get starterd",
-    benefitList: [
-      "4 team member",
-      "8 GB storage",
-      "Upto 6 pages",
-      "Priority support",
-      "AI assistance",
-    ],
+    title: "فيلر شفايف ريف",
+    price: 799,
   },
   {
-    title: "Enterprise",
-    popular: 0,
-    price: 120,
-    description:
-      "Lorem ipsum dolor sit, amet ipsum consectetur adipisicing elit.",
-    buttonText: "Contact US",
-    benefitList: [
-      "10 team member",
-      "20 GB storage",
-      "Upto 10 pages",
-      "Phone & email support",
-      "AI assistance",
-    ],
+    title: "باقة 4 خيوط لشد الوجه",
+    price: 1249,
+  },
+  {
+    title: "إبرة الياقوت والأكسوزوم للنضارة",
+    price: 749,
+  },
+  {
+    title: "ليزر كانديلا جسم كامل + رتوش",
+    price: 514,
   },
 ];
 
 export const PricingSection = () => {
   return (
-    <section className="container py-24 sm:py-32">
-      <h2 className="text-lg text-primary text-center mb-2 tracking-wider">
-        Pricing
-      </h2>
+    <section id="pricing" className="w-full bg-[#FAF8F5] py-20 sm:py-28 text-right">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        {/* عنوان القسم */}
+        <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
+          <h2 className="text-2xl sm:text-4xl font-bold text-zinc-900 tracking-tight">
+            العروض والباقات
+          </h2>
+        </div>
 
-      <h2 className="text-3xl md:text-4xl text-center font-bold mb-4">
-        Get unlimitted access
-      </h2>
-
-      <h3 className="md:w-1/2 mx-auto text-xl text-center text-muted-foreground pb-14">
-        Lorem ipsum dolor sit amet consectetur adipisicing reiciendis.
-      </h3>
-
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-4">
-        {plans.map(
-          ({ title, popular, price, description, buttonText, benefitList }) => (
-            <Card
-              key={title}
-              className={
-                popular === PopularPlan?.YES
-                  ? "drop-shadow-xl shadow-black/10 dark:shadow-white/10 border-[1.5px] border-primary lg:scale-[1.1]"
-                  : ""
-              }
+        {/* شبكة الكروت الفندقية الفاخرة - 3 عناصر فقط لكل كارت */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          {officialOffers.map((offer) => (
+            <div
+              key={offer.title}
+              className="bg-white rounded-3xl p-8 border border-[#E8DFD1] hover:border-[#C5A880] shadow-sm hover:shadow-xl transition-all flex flex-col justify-between text-right"
             >
-              <CardHeader>
-                <CardTitle className="pb-2">{title}</CardTitle>
+              {/* 1. اسم العرض */}
+              <div>
+                <h3 className="text-xl sm:text-2xl font-bold text-zinc-900 mb-2 leading-snug">
+                  {offer.title}
+                </h3>
+              </div>
 
-                <CardDescription className="pb-4">
-                  {description}
-                </CardDescription>
+              {/* 2. السعر النهائي فقط */}
+              <div className="my-6">
+                <span className="text-4xl sm:text-5xl font-bold text-[#8C6D46] tracking-tight">
+                  {offer.price}
+                </span>
+                <span className="text-xl sm:text-2xl font-bold text-[#8C6D46] mr-2">
+                  ريال
+                </span>
+              </div>
 
-                <div>
-                  <span className="text-3xl font-bold">${price}</span>
-                  <span className="text-muted-foreground"> /month</span>
-                </div>
-              </CardHeader>
-
-              <CardContent className="flex">
-                <div className="space-y-4">
-                  {benefitList.map((benefit) => (
-                    <span key={benefit} className="flex">
-                      <Check className="text-primary mr-2" />
-                      <h3>{benefit}</h3>
-                    </span>
-                  ))}
-                </div>
-              </CardContent>
-
-              <CardFooter>
-                <Button
-                  variant={
-                    popular === PopularPlan?.YES ? "default" : "secondary"
-                  }
-                  className="w-full"
+              {/* 3. زر الحجز المباشر */}
+              <div>
+                <button
+                  onClick={() => openBookingModal(offer.title)}
+                  className="w-full py-4 rounded-2xl bg-zinc-900 hover:bg-[#8C6D46] text-white font-bold text-base transition-colors cursor-pointer border-none text-center shadow-md hover:shadow-lg"
                 >
-                  {buttonText}
-                </Button>
-              </CardFooter>
-            </Card>
-          )
-        )}
+                  احجزي العرض الآن
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+
       </div>
     </section>
   );
