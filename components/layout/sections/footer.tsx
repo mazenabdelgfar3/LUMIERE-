@@ -45,7 +45,7 @@ export const FooterSection = () => {
                 </a>
               </li>
               <li>
-                <a href="#doctors" className="hover:text-white transition-opacity hover:opacity-75 block">
+                <a href="#hero" className="hover:text-white transition-opacity hover:opacity-75 block">
                   طبيبات لوميير
                 </a>
               </li>

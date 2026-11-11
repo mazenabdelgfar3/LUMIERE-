@@ -1,7 +1,6 @@
 import { Navbar } from "@/components/layout/navbar";
 import { HeroSection } from "@/components/layout/sections/hero";
 import { BeforeAfterSection } from "@/components/layout/sections/before-after";
-import { DoctorsSection } from "@/components/layout/sections/doctors";
 import { PricingSection } from "@/components/layout/sections/pricing";
 import { BranchesMapSection } from "@/components/layout/sections/branches-map";
 import { FooterSection } from "@/components/layout/sections/footer";
@@ -18,7 +17,6 @@ export default function Home() {
       <Navbar />
       <HeroSection />
       <BeforeAfterSection />
-      <DoctorsSection />
       <PricingSection />
       <BranchesMapSection />
       <FooterSection />
