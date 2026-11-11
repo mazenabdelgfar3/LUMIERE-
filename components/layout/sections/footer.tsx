@@ -243,6 +243,41 @@ export const FooterSection = () => {
 
         </div>
 
+        {/* توقيع المطور (Powered by Mazen Abdelgfar) */}
+        <div className="mt-8 pt-6 border-t border-white/15 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs sm:text-sm text-white/80">
+          <div className="flex items-center gap-2">
+            <span className="font-bold tracking-wider text-white text-xs sm:text-sm">
+              POWERED BY MAZEN ABDELGFAR
+            </span>
+          </div>
+          
+          <div className="flex items-center gap-5">
+            {/* WhatsApp */}
+            <a
+              href="https://wa.me/201022234967"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-white hover:text-emerald-300 transition-colors font-semibold"
+              dir="ltr"
+            >
+              <MessageCircle className="w-4 h-4 text-emerald-300" />
+              <span>01022234967</span>
+            </a>
+
+            {/* Instagram */}
+            <a
+              href="https://www.instagram.com/mazenabdelgfar/?hl=ar"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-white hover:text-pink-300 transition-colors font-semibold"
+              aria-label="Mazen Abdelgfar Instagram"
+            >
+              <Instagram className="w-4 h-4 text-pink-300" />
+              <span>Instagram</span>
+            </a>
+          </div>
+        </div>
+
       </div>
     </footer>
   );
