@@ -9,8 +9,9 @@ export const ContactSection = () => {
   const [selectedBranch, setSelectedBranch] = useState("فرع الروضة");
   const [selectedService, setSelectedService] = useState("لومي فيس ناعم (1,899 ريال)");
   const [notes, setNotes] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleBookingSubmit = (e: React.FormEvent) => {
+  const handleBookingSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!patientName.trim() || !patientPhone.trim()) {
@@ -18,18 +19,58 @@ export const ContactSection = () => {
       return;
     }
 
-    const message = 
+    setIsSubmitting(true);
+
+    const payload = {
+      name: patientName.trim(),
+      phone: patientPhone.trim(),
+      email: "",
+      branch: selectedBranch,
+      service: selectedService + (notes.trim() ? ` (ملاحظة: ${notes.trim()})` : ""),
+    };
+
+    const PRODUCTION_WEBHOOK = "https://maroon-sardine-668853.hostingersite.com/webhook/lumiere-booking";
+
+    try {
+      const res = await fetch("/api/book", {
+        method: "POST",
+        headers: { 
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        throw new Error(`API responded with ${res.status}`);
+      }
+    } catch (err) {
+      console.warn("Contact form API error, attempting direct webhook fallback:", err);
+      try {
+        await fetch(PRODUCTION_WEBHOOK, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+          mode: "no-cors",
+        });
+      } catch (directErr) {
+        console.error("Direct webhook fallback error:", directErr);
+      }
+    } finally {
+      const message = 
 `✨ *طلب حجز موعد - عيادات لوميير للتجميل* ✨
 ━━━━━━━━━━━━━━━━━━
-👤 *الاسم:* ${patientName}
-📱 *رقم واتساب:* ${patientPhone}
+👤 *الاسم:* ${patientName.trim()}
+📱 *رقم واتساب:* ${patientPhone.trim()}
 📍 *الفرع المطلوب:* ${selectedBranch}
 💉 *الإجراء / العرض:* ${selectedService}
 ${notes.trim() ? `📝 *ملاحظات:* ${notes.trim()}\n` : ""}━━━━━━━━━━━━━━━━━━
 أرجو تأكيد أقرب موعد متاح. شكراً لكم!`;
 
-    const url = `https://wa.me/966920002024?text=${encodeURIComponent(message)}`;
-    window.open(url, "_blank");
+      const url = `https://wa.me/966920002024?text=${encodeURIComponent(message)}`;
+      setIsSubmitting(false);
+      window.open(url, "_blank");
+    }
   };
 
   return (
@@ -148,10 +189,11 @@ ${notes.trim() ? `📝 *ملاحظات:* ${notes.trim()}\n` : ""}━━━━━
           <div className="pt-2">
             <button
               type="submit"
-              className="w-full h-14 rounded-full bg-[#C5A880] hover:bg-[#b5966c] text-zinc-950 font-bold text-base shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer border-none"
+              disabled={isSubmitting}
+              className="w-full h-14 rounded-full bg-[#C5A880] hover:bg-[#b5966c] text-zinc-950 font-bold text-base shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer border-none disabled:opacity-60"
             >
               <MessageCircle className="w-5 h-5 fill-zinc-950 text-[#C5A880]" />
-              <span>تأكيد الحجز المباشر عبر واتساب</span>
+              <span>{isSubmitting ? "جاري تسجيل الحجز..." : "تأكيد الحجز المباشر عبر واتساب"}</span>
               <ArrowLeft className="w-4 h-4 mr-1" />
             </button>
           </div>

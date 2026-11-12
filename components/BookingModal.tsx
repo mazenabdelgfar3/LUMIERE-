@@ -58,37 +58,62 @@ export const BookingModal = () => {
 
     setIsSubmitting(true);
 
-    try {
-      await fetch("/api/book", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: patientName,
-          phone: patientPhone,
-          email: patientEmail,
-          branch: selectedBranch,
-          service: selectedService || "استشارة عامة",
-        }),
-      });
-    } catch (err) {
-      console.error("Booking API error:", err);
-    }
+    const payload = {
+      name: patientName.trim(),
+      phone: patientPhone.trim(),
+      email: patientEmail.trim(),
+      branch: selectedBranch,
+      service: selectedService.trim() || "استشارة عامة",
+    };
 
-    // Direct WhatsApp confirmation
-    const message = 
+    const PRODUCTION_WEBHOOK = "https://maroon-sardine-668853.hostingersite.com/webhook/lumiere-booking";
+
+    try {
+      // 1. إرسال الطلب إلى API الموقع الداخلي وانتظار الرد صراحة
+      const res = await fetch("/api/book", {
+        method: "POST",
+        headers: { 
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify(payload),
+      });
+
+      // 2. إذا تعذر API الداخلي، يتم إرسال طلب مباشر احتياطي إلى Production Webhook
+      if (!res.ok) {
+        throw new Error(`API responded with ${res.status}`);
+      }
+    } catch (err) {
+      console.warn("Primary API route error, sending backup directly to n8n webhook:", err);
+      try {
+        await fetch(PRODUCTION_WEBHOOK, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+          mode: "no-cors",
+        });
+      } catch (directErr) {
+        console.error("Direct webhook fallback failed:", directErr);
+      }
+    } finally {
+      // 3. الانتقال إلى واتساب بعد اكتمال أو محاولة إرسال الـ Webhook بنجاح
+      const message = 
 `✨ *طلب حجز موعد - عيادات لوميير بجدة* ✨
 ━━━━━━━━━━━━━━━━━━
-👤 *الاسم:* ${patientName}
-📱 *رقم الجوال:* +966${patientPhone.replace(/^0+/, "")}
+👤 *الاسم:* ${patientName.trim()}
+📱 *رقم الجوال:* +966${patientPhone.trim().replace(/^0+/, "")}
 📍 *الفرع المختار:* ${selectedBranch}
-${patientEmail.trim() ? `📧 *البريد:* ${patientEmail}\n` : ""}${selectedService.trim() ? `💉 *الخدمة أو العرض:* ${selectedService}\n` : ""}━━━━━━━━━━━━━━━━━━
+${patientEmail.trim() ? `📧 *البريد:* ${patientEmail.trim()}\n` : ""}${selectedService.trim() ? `💉 *الخدمة أو العرض:* ${selectedService.trim()}\n` : ""}━━━━━━━━━━━━━━━━━━
 أرجو تأكيد أقرب موعد متاح في هذا الفرع. شكراً لكم!`;
 
-    const url = `https://wa.me/966920002024?text=${encodeURIComponent(message)}`;
-    window.open(url, "_blank");
+      const url = `https://wa.me/966920002024?text=${encodeURIComponent(message)}`;
+      
+      setIsSubmitting(false);
+      setIsOpen(false);
 
-    setIsSubmitting(false);
-    setIsOpen(false);
+      // فتح محادثة الواتساب بعد اكتمال شبكة الـ Webhook
+      window.open(url, "_blank");
+    }
   };
 
   if (!isOpen) return null;
@@ -239,9 +264,9 @@ ${patientEmail.trim() ? `📧 *البريد:* ${patientEmail}\n` : ""}${selected
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full h-14 rounded-xl bg-[#8C6D46] hover:bg-[#735836] text-white font-bold text-lg shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 cursor-pointer border-none"
+              className="w-full h-14 rounded-xl bg-[#8C6D46] hover:bg-[#735836] text-white font-bold text-lg shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 cursor-pointer border-none disabled:opacity-70 disabled:cursor-not-allowed"
             >
-              <span>{isSubmitting ? "جاري الإرسال..." : "تأكيد حجز الموعد"}</span>
+              <span>{isSubmitting ? "جاري تسجيل وتأكيد الحجز..." : "تأكيد حجز الموعد"}</span>
             </button>
           </div>
 
